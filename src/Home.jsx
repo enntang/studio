@@ -50,7 +50,7 @@ function Home() {
           <a href='#pricing' className='hover:opacity-50 transition-opacity'>
             PRICING
           </a>
-          <a href='mailto:viesty2004@gmail.com' className='hover:opacity-50 transition-opacity'>
+          <a href='mailto:enntang.work@gmail.com' className='hover:opacity-50 transition-opacity'>
             CONTACT
           </a>
         </nav>
@@ -59,8 +59,7 @@ function Home() {
           <span aria-hidden='true' className='block not-italic mb-2'>↘</span>
           <div className='flex flex-col gap-1'>
             <a href='https://instagram.com' target='_blank' rel='noreferrer' className='hover:opacity-50 transition-opacity'>Instagram</a>
-            <a href='https://behance.net' target='_blank' rel='noreferrer' className='hover:opacity-50 transition-opacity'>Behance</a>
-            <a href='https://facebook.com' target='_blank' rel='noreferrer' className='hover:opacity-50 transition-opacity'>Facebook</a>
+            <a href='mailto:enntang.work@gmail.com' className='hover:opacity-50 transition-opacity'>enntang.work@gmail.com</a>
           </div>
         </div>
       </aside>
@@ -134,7 +133,7 @@ function Home() {
           </dl>
           <p className='mt-8 text-sm text-neutral-500 leading-relaxed'>
             以上為參考價格，實際依需求規模與時程報價。
-            歡迎來信 <a href='mailto:viesty2004@gmail.com' className='underline underline-offset-4 hover:opacity-60'>viesty2004@gmail.com</a> 討論你的專案。
+            歡迎來信 <a href='mailto:enntang.work@gmail.com' className='underline underline-offset-4 hover:opacity-60'>enntang.work@gmail.com</a> 討論你的專案。
           </p>
         </section>
 
