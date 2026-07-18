@@ -37,6 +37,9 @@ function Home() {
               {f.label}
             </button>
           ))}
+          <a href='#/wallpapers' className='hover:opacity-50 transition-opacity'>
+            WALLPAPERS
+          </a>
           <a href='mailto:enntang.work@gmail.com' className='hover:opacity-50 transition-opacity'>
             CONTACT
           </a>
@@ -70,6 +73,7 @@ function Home() {
               {f.key.toUpperCase()}
             </button>
           ))}
+          <a href='#/wallpapers'>WALLPAPERS</a>
         </div>
       </header>
 

@@ -3,6 +3,9 @@ export const BASE = import.meta.env.BASE_URL
 // 作品資料來自 Notion（npm run sync 產生），見 works.generated.js
 export { WORKS } from './works.generated'
 
+// 桌布資料來自 Notion（npm run sync 產生），見 wallpapers.generated.js
+export { WALLPAPERS } from './wallpapers.generated'
+
 export const FILTERS = [
   { key: 'client', label: 'CLIENT WORK' },
   { key: 'personal', label: 'PERSONAL WORK' },

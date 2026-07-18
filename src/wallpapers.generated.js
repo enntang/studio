@@ -1,0 +1,3 @@
+// 此檔案由 npm run sync 從 Notion 自動產生，請勿手動編輯。
+// 桌布的新增與修改請到 Notion 的 Wallpapers 資料庫操作。
+export const WALLPAPERS = []
