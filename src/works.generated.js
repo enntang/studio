@@ -2,6 +2,16 @@
 // 作品的新增與修改請到 Notion 的 Works 資料庫操作。
 export const WORKS = [
   {
+    "slug": "test",
+    "title": "test",
+    "category": "personal",
+    "date": "2026-07-18",
+    "year": "2022",
+    "description": "",
+    "cover": "work-images/test/cover.png",
+    "content": "\n\n<div class=\"grid grid-cols-2 gap-4 mb-8\">\n<div><img src=\"/work-images/test/col-3a1bba8d-0-1.png\" alt=\"\" class=\"w-full h-auto block\" /></div>\n<div><img src=\"/work-images/test/col-3a1bba8d-1-1.png\" alt=\"\" class=\"w-full h-auto block\" /></div>\n</div>\n\n\n"
+  },
+  {
     "slug": "gentle-giant",
     "title": "Gentle Giant",
     "category": "personal",
