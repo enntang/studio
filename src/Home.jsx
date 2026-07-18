@@ -5,9 +5,7 @@ import Reveal from './Reveal'
 /**
  * 首頁：
  * - 固定左欄（文字標示、選單、斜體社群連結）
- * - 右上角直式文字 logo
  * - 主區域為多欄瀑布流（CSS columns），點擊作品進入獨立頁面
- * - 下方為委託價目表
  */
 function Home() {
   const [filter, setFilter] = useState(null) // null = all
@@ -16,14 +14,6 @@ function Home() {
 
   return (
     <div className='min-h-screen bg-white font-serif text-neutral-800'>
-      {/* 右上角直式 logo */}
-      <div
-        className='fixed top-8 right-8 z-30 hidden md:block select-none text-neutral-700'
-        style={{ writingMode: 'vertical-rl', letterSpacing: '0.4em' }}
-      >
-        作品目錄
-      </div>
-
       {/* 固定左欄 */}
       <aside className='fixed left-6 md:left-10 top-0 z-20 pt-10 md:pt-14 w-44 hidden md:flex flex-col h-full'>
         <a href='#/' className='block mb-10 hover:opacity-60 transition-opacity'>
