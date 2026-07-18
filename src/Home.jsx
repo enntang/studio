@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { BASE, WORKS, FILTERS, PRICING } from './data'
+import { BASE, WORKS, FILTERS } from './data'
 import Reveal from './Reveal'
 
 /**
@@ -47,9 +47,6 @@ function Home() {
               {f.label}
             </button>
           ))}
-          <a href='#pricing' className='hover:opacity-50 transition-opacity'>
-            PRICING
-          </a>
           <a href='mailto:enntang.work@gmail.com' className='hover:opacity-50 transition-opacity'>
             CONTACT
           </a>
@@ -83,7 +80,6 @@ function Home() {
               {f.key.toUpperCase()}
             </button>
           ))}
-          <a href='#pricing'>PRICING</a>
         </div>
       </header>
 
@@ -95,7 +91,7 @@ function Home() {
               <figure>
                 <a
                   href={`#/work/${item.slug}`}
-                  className='block w-full group'
+                  className='block w-full group relative'
                   aria-label={`View ${item.title}`}
                 >
                   {item.cover ? (
@@ -103,39 +99,24 @@ function Home() {
                       src={BASE + item.cover}
                       alt={item.title}
                       loading='lazy'
-                      className='w-full h-auto block transition-opacity duration-300 group-hover:opacity-80'
+                      className='w-full h-auto block'
                     />
                   ) : (
                     // Notion 尚未上傳 Cover 時的暫代區塊
-                    <div className='aspect-[4/3] bg-neutral-100 flex items-center justify-center text-neutral-400 text-sm tracking-widest transition-opacity duration-300 group-hover:opacity-80'>
+                    <div className='aspect-[4/3] bg-neutral-100 flex items-center justify-center text-neutral-400 text-sm tracking-widest'>
                       {item.title}
                     </div>
                   )}
+                  {/* hover 時顯示標題與年份 */}
+                  <div className='absolute inset-0 bg-white/75 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-1 text-center px-4'>
+                    <div className='font-bold tracking-wider text-neutral-800'>{item.title}</div>
+                    <div className='text-xs tracking-[0.25em] text-neutral-500'>{item.year}</div>
+                  </div>
                 </a>
               </figure>
             </Reveal>
           ))}
         </div>
-
-        {/* 價目表 */}
-        <section id='pricing' className='mt-28 max-w-2xl scroll-mt-16'>
-          <h2 className='text-sm tracking-[0.3em] text-neutral-500 mb-10'>PRICING 委託價目</h2>
-          <dl className='divide-y divide-neutral-200'>
-            {PRICING.map((p) => (
-              <div key={p.name} className='py-6 flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-8'>
-                <dt className='w-40 shrink-0 font-bold tracking-wide'>{p.name}</dt>
-                <dd className='flex-1'>
-                  <div className='mb-1'>{p.price}</div>
-                  <div className='text-sm text-neutral-500 leading-relaxed'>{p.note}</div>
-                </dd>
-              </div>
-            ))}
-          </dl>
-          <p className='mt-8 text-sm text-neutral-500 leading-relaxed'>
-            以上為參考價格，實際依需求規模與時程報價。
-            歡迎來信 <a href='mailto:enntang.work@gmail.com' className='underline underline-offset-4 hover:opacity-60'>enntang.work@gmail.com</a> 討論你的專案。
-          </p>
-        </section>
 
         <footer className='mt-20 text-xs tracking-widest text-neutral-400'>
           © {new Date().getFullYear()} Enn Tang
