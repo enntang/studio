@@ -5,7 +5,10 @@ export const WORKS = [
     "slug": "test",
     "title": "test",
     "category": "personal",
-    "tags": [],
+    "tags": [
+      "Illustration",
+      "Web Design"
+    ],
     "date": "2026-07-18",
     "year": "2022",
     "description": "",
@@ -16,7 +19,9 @@ export const WORKS = [
     "slug": "gentle-giant",
     "title": "Gentle Giant",
     "category": "personal",
-    "tags": [],
+    "tags": [
+      "Web Design"
+    ],
     "date": "2024-07-28",
     "year": "2024",
     "description": "",
@@ -27,7 +32,9 @@ export const WORKS = [
     "slug": "star",
     "title": "Star",
     "category": "personal",
-    "tags": [],
+    "tags": [
+      "Illustration"
+    ],
     "date": "2022-03-05",
     "year": "2022",
     "description": "",
@@ -38,7 +45,9 @@ export const WORKS = [
     "slug": "portrait",
     "title": "Kiwi Buddies",
     "category": "personal",
-    "tags": [],
+    "tags": [
+      "Graphic Design"
+    ],
     "date": "2022-01-15",
     "year": "2022",
     "description": "個人插畫創作。這裡放作品介紹文字。",
@@ -49,7 +58,10 @@ export const WORKS = [
     "slug": "penguin-poster",
     "title": "虎年大吉大利",
     "category": "personal",
-    "tags": [],
+    "tags": [
+      "Illustration",
+      "Graphic Design"
+    ],
     "date": "2022-01-03",
     "year": "2022",
     "description": "虎年當然也是貓的年囉！推出台北捷運悠遊卡設計，作為紀念",
