@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import Home from './Home'
 import WorkDetail from './WorkDetail'
 import Wallpapers from './Wallpapers'
+import About from './About'
+import Contact from './Contact'
 import { WORKS } from './data'
 
 /**
@@ -10,6 +12,8 @@ import { WORKS } from './data'
  * - #/            首頁（瀑布流），見 Home.jsx
  * - #/work/<slug> 作品獨立頁面，見 WorkDetail.jsx
  * - #/wallpapers  手機桌布下載頁，見 Wallpapers.jsx
+ * - #/about       個人簡介頁，見 About.jsx
+ * - #/contact     聯絡頁，見 Contact.jsx
  */
 
 function useHashRoute() {
@@ -38,6 +42,14 @@ function App() {
 
   if (hash.startsWith('#/wallpapers')) {
     return <Wallpapers />
+  }
+
+  if (hash.startsWith('#/about')) {
+    return <About />
+  }
+
+  if (hash.startsWith('#/contact')) {
+    return <Contact />
   }
 
   return <Home />
