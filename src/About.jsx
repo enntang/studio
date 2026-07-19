@@ -49,8 +49,8 @@ function About() {
           </div>
           <div>
             工作邀約 →{' '}
-            <a href='#/contact' className='font-bold underline underline-offset-4 hover:opacity-60'>
-              Contact
+            <a href='mailto:enntang.work@gmail.com' className='font-bold underline underline-offset-4 hover:opacity-60'>
+              enntang.work@gmail.com
             </a>
           </div>
         </div>
