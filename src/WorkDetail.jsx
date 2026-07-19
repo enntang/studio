@@ -60,8 +60,29 @@ function WorkDetail({ work }) {
           <img src={BASE + 'logo.svg'} alt='一元復始' className='h-[60px] md:h-[80px] w-auto' />
         </a>
 
-        <h1 className='text-xl font-bold tracking-wide mb-2'>{work.title}</h1>
-        <div className='text-sm tracking-[0.2em] text-neutral-400 mb-8'>{work.year}</div>
+        <h1 className='text-xl font-bold tracking-wide mb-1'>{work.title}</h1>
+        {work.englishName && (
+          <div className='text-sm text-neutral-500 mb-2'>{work.englishName}</div>
+        )}
+        <div className='text-sm tracking-[0.2em] text-neutral-400 mb-6'>{work.year}</div>
+
+        {/* Client 類作品的委託資訊：Client、Design，沒填的欄位不顯示 */}
+        {work.category === 'client' && (work.client || work.design) && (
+          <dl className='text-sm text-neutral-600 mb-6 space-y-1'>
+            {work.client && (
+              <div>
+                <dt className='inline text-neutral-400 tracking-wide'>Client</dt>
+                <dd className='inline ml-2'>{work.client}</dd>
+              </div>
+            )}
+            {work.design && (
+              <div>
+                <dt className='inline text-neutral-400 tracking-wide'>Design</dt>
+                <dd className='inline ml-2'>{work.design}</dd>
+              </div>
+            )}
+          </dl>
+        )}
 
         <p className='text-sm leading-relaxed text-neutral-600 whitespace-pre-line'>
           {work.description}
