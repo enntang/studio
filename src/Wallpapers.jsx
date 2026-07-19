@@ -36,9 +36,8 @@ function Wallpapers() {
     <div className='min-h-screen bg-white font-serif text-neutral-800 md:grid md:grid-cols-[22rem_1fr]'>
       {/* 左欄：縮圖列表 */}
       <aside className='px-8 md:px-10 pt-10 md:pt-14 pb-10 md:h-screen md:overflow-y-auto'>
-        <a href='#/' className='block mb-10 hover:opacity-60 transition-opacity'>
-          <div className='font-bold tracking-wider text-lg mb-1'>Enn Tang</div>
-          <div className='text-xs tracking-[0.25em] text-neutral-400'>STUDIO</div>
+        <a href='#/' className='flex justify-center md:block mb-10 hover:opacity-60 transition-opacity'>
+          <img src={BASE + 'logo.svg'} alt='一元復始' className='h-[60px] md:h-[80px] w-auto' />
         </a>
 
         <h1 className='text-sm tracking-[0.3em] text-neutral-500 mb-6'>WALLPAPERS 手機桌布</h1>

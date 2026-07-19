@@ -15,6 +15,7 @@ const ALL_TAGS = [...new Set(WORKS.flatMap((w) => w.tags || []))].sort()
 function Home() {
   const [filter, setFilter] = useState(null) // null = all
   const [tagFilter, setTagFilter] = useState(null) // null = all
+  const [menuOpen, setMenuOpen] = useState(false) // 行動版漢堡選單
 
   const items = WORKS.filter(
     (w) =>
@@ -25,10 +26,9 @@ function Home() {
   return (
     <div className='min-h-screen bg-white font-serif text-neutral-800'>
       {/* 固定左欄 */}
-      <aside className='fixed left-6 md:left-10 top-0 z-20 pt-10 md:pt-14 w-44 hidden md:flex flex-col h-full'>
+      <aside className='fixed left-6 md:left-10 top-0 z-20 pt-10 md:pt-14 w-56 hidden md:flex flex-col h-full'>
         <a href='#/' className='block mb-10 hover:opacity-60 transition-opacity'>
-          <div className='font-bold tracking-wider text-lg mb-1'>Enn Tang</div>
-          <div className='text-xs tracking-[0.25em] text-neutral-400'>STUDIO</div>
+          <img src={BASE + 'logo.svg'} alt='一元復始' className='h-[80px] w-auto' />
         </a>
 
         <nav className='flex flex-col gap-4 text-[13px] tracking-[0.15em] text-neutral-700'>
@@ -56,7 +56,6 @@ function Home() {
         </nav>
 
         <div className='mt-14 text-sm italic text-neutral-600'>
-          <span aria-hidden='true' className='block not-italic mb-2'>↘</span>
           <div className='flex flex-col gap-2 items-start'>
             <a
               href='https://www.instagram.com/enn.illust/'
@@ -73,31 +72,50 @@ function Home() {
       </aside>
 
       {/* 行動版頂部列 */}
-      <header className='md:hidden sticky top-0 z-20 bg-white/90 backdrop-blur px-8 py-4 flex items-center justify-between'>
-        <a href='#/' className='font-bold tracking-wider'>Enn Tang</a>
-        <div className='flex gap-3 text-[11px] tracking-widest text-neutral-600'>
+      <header className='md:hidden sticky top-0 z-20 bg-white/90 backdrop-blur'>
+        <div className='px-8 py-4 flex items-center justify-between'>
+          <a href='#/' className='block shrink-0'>
+            <img src={BASE + 'logo.svg'} alt='一元復始' className='h-[60px] w-auto' />
+          </a>
           <button
-            className={filter === null ? 'underline underline-offset-4' : ''}
-            onClick={() => setFilter(null)}
+            aria-label={menuOpen ? '關閉選單' : '開啟選單'}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((v) => !v)}
+            className='text-2xl leading-none px-1'
           >
-            ALL
+            {menuOpen ? '✕' : '☰'}
           </button>
-          {FILTERS.map((f) => (
-            <button
-              key={f.key}
-              className={filter === f.key ? 'underline underline-offset-4' : ''}
-              onClick={() => setFilter(f.key)}
-            >
-              {f.key.toUpperCase()}
-            </button>
-          ))}
-          <a href='#/about'>PROFILE</a>
-          <a href='#/contact'>CONTACT</a>
         </div>
+
+        {menuOpen && (
+          <nav className='px-8 pb-6 flex flex-col gap-4 text-sm tracking-[0.15em] text-neutral-700 border-t border-neutral-100 pt-5'>
+            <button
+              className={`text-left hover:opacity-50 transition-opacity ${filter === null ? 'underline underline-offset-4' : ''}`}
+              onClick={() => { setFilter(null); setMenuOpen(false) }}
+            >
+              ALL WORK
+            </button>
+            {FILTERS.map((f) => (
+              <button
+                key={f.key}
+                className={`text-left hover:opacity-50 transition-opacity ${filter === f.key ? 'underline underline-offset-4' : ''}`}
+                onClick={() => { setFilter(f.key); setMenuOpen(false) }}
+              >
+                {f.label}
+              </button>
+            ))}
+            <a href='#/about' className='hover:opacity-50 transition-opacity'>
+              PROFILE
+            </a>
+            <a href='#/contact' className='hover:opacity-50 transition-opacity'>
+              CONTACT
+            </a>
+          </nav>
+        )}
       </header>
 
       {/* 瀑布流主區域 */}
-      <main className='pl-8 pr-8 md:pl-64 md:pr-24 pt-10 md:pt-14 pb-24'>
+      <main className='pl-8 pr-8 md:pl-72 md:pr-24 pt-10 md:pt-14 pb-24'>
         {/* 標籤篩選列 */}
         {ALL_TAGS.length > 0 && (
           <div className='flex flex-wrap gap-x-5 gap-y-2 mb-10 text-[13px] tracking-[0.1em] text-neutral-500'>

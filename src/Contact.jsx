@@ -1,3 +1,5 @@
+import { BASE } from './data'
+
 /**
  * 聯絡頁（版面參照 zaoridraws.cargo.site 的 Contact 頁）：
  * - 左欄：文字標示（回首頁）、返回連結
@@ -9,9 +11,8 @@ function Contact() {
   return (
     <div className='min-h-screen bg-white font-serif text-neutral-800 md:grid md:grid-cols-[18rem_1fr]'>
       <aside className='px-8 md:pl-10 md:pr-6 pt-10 md:pt-14 md:sticky md:top-0 md:h-screen flex flex-col'>
-        <a href='#/' className='block mb-12 hover:opacity-60 transition-opacity'>
-          <div className='font-bold tracking-wider text-lg mb-1'>Enn Tang</div>
-          <div className='text-xs tracking-[0.25em] text-neutral-400'>STUDIO</div>
+        <a href='#/' className='flex justify-center md:block mb-12 hover:opacity-60 transition-opacity'>
+          <img src={BASE + 'logo.svg'} alt='一元復始' className='h-[60px] md:h-[80px] w-auto' />
         </a>
 
         <h1 className='text-sm tracking-[0.3em] text-neutral-500'>CONTACT</h1>

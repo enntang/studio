@@ -11,9 +11,8 @@ function About() {
   return (
     <div className='min-h-screen bg-white font-serif text-neutral-800 md:grid md:grid-cols-[18rem_1fr]'>
       <aside className='px-8 md:pl-10 md:pr-6 pt-10 md:pt-14 md:sticky md:top-0 md:h-screen flex flex-col'>
-        <a href='#/' className='block mb-12 hover:opacity-60 transition-opacity'>
-          <div className='font-bold tracking-wider text-lg mb-1'>Enn Tang</div>
-          <div className='text-xs tracking-[0.25em] text-neutral-400'>STUDIO</div>
+        <a href='#/' className='flex justify-center md:block mb-12 hover:opacity-60 transition-opacity'>
+          <img src={BASE + 'logo.svg'} alt='一元復始' className='h-[60px] md:h-[80px] w-auto' />
         </a>
 
         <h1 className='text-sm tracking-[0.3em] text-neutral-500'>PROFILE</h1>
@@ -28,9 +27,9 @@ function About() {
 
       <main className='px-8 md:pl-0 md:pr-24 pt-8 md:pt-14 pb-24 max-w-2xl'>
         <img
-          src={BASE + 'portrait.png'}
+          src={BASE + 'avatar.png'}
           alt='Enn Tang'
-          className='w-40 h-40 object-cover rounded-full grayscale mb-10'
+          className='w-40 h-40 object-cover rounded-full mb-10'
         />
 
         <h2 className='text-xl font-bold tracking-wide mb-4'>Enn Tang</h2>

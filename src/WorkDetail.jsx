@@ -56,9 +56,8 @@ function WorkDetail({ work }) {
     <div className='min-h-screen bg-white font-serif text-neutral-800 md:grid md:grid-cols-[18rem_1fr]'>
       {/* 左欄：年代與介紹 */}
       <aside className='px-8 md:pl-10 md:pr-6 pt-10 md:pt-14 md:sticky md:top-0 md:h-screen flex flex-col'>
-        <a href='#/' className='block mb-12 hover:opacity-60 transition-opacity'>
-          <div className='font-bold tracking-wider text-lg mb-1'>Enn Tang</div>
-          <div className='text-xs tracking-[0.25em] text-neutral-400'>STUDIO</div>
+        <a href='#/' className='flex justify-center md:block mb-12 hover:opacity-60 transition-opacity'>
+          <img src={BASE + 'logo.svg'} alt='一元復始' className='h-[60px] md:h-[80px] w-auto' />
         </a>
 
         <h1 className='text-xl font-bold tracking-wide mb-2'>{work.title}</h1>
@@ -77,7 +76,7 @@ function WorkDetail({ work }) {
       </aside>
 
       {/* 右側：圖文內容 */}
-      <main className='px-8 md:pl-0 md:pr-24 pt-8 md:pt-14 pb-24'>
+      <main className='px-8 md:px-0 pt-8 md:pt-14 pb-24 md:max-w-[600px] md:mx-auto'>
         {work.content ? (
           <ReactMarkdown components={mdComponents} rehypePlugins={[rehypeRaw]}>{work.content}</ReactMarkdown>
         ) : (
