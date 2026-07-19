@@ -66,9 +66,9 @@ function WorkDetail({ work }) {
         )}
         <div className='text-sm tracking-[0.2em] text-neutral-400 mb-6'>{work.year}</div>
 
-        {/* Client 類作品的委託資訊：Client、Design，沒填的欄位不顯示 */}
-        {work.category === 'client' && (work.client || work.design) && (
-          <dl className='text-sm text-neutral-600 mb-6 space-y-1'>
+        {/* Project 類作品的委託資訊：Client、Design，沒填的欄位不顯示 */}
+        {work.category === 'project' && (work.client || work.design) && (
+          <dl className='text-xs text-neutral-600 mb-6 space-y-1'>
             {work.client && (
               <div>
                 <dt className='inline text-neutral-400 tracking-wide'>Client</dt>

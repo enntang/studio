@@ -12,12 +12,12 @@ import heicConvert from 'heic-convert'
  *
  * Notion 欄位（資料庫：Studio Sync）：
  * - Name（標題）、Slug（文字）、Status（選項，Published 才同步）
- * - Category（選項：client / personal）
+ * - Category（選項：project / illustration）
  * - Tags（多選，首頁的標籤篩選列；選項可直接在 Notion 裡新增）
  * - Date（日期，創作日期；首頁依此排序，新的在前）
  * - Year（文字或數字，選填；沒填就從 Date 取年份）
  * - English Name（文字，選填，顯示在標題下方；沒填就不顯示）
- * - Client、Design（文字，選填；只有 Category=client 的作品會顯示在作品頁左欄，
+ * - Client、Design（文字，選填；只有 Category=project 的作品會顯示在作品頁左欄，
  *   跟 Year 同一層級，沒填的欄位不會顯示）
  * - Description（文字，作品頁左欄介紹）、Cover（Files，首頁縮圖）
  * - 頁面內文（圖片與文字段落）→ 作品頁右側內容
@@ -129,7 +129,7 @@ async function main() {
     works.push({
       slug,
       title,
-      category: (getSelect(props.Category) || 'client').toLowerCase(),
+      category: (getSelect(props.Category) || 'illustration').toLowerCase(),
       tags: getMultiSelect(props.Tags),
       date,
       year: getText(props.Year) || getNumberText(props.Year) || (date ? date.slice(0, 4) : ''),

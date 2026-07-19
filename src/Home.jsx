@@ -1,10 +1,13 @@
-import { useState } from 'react'
-import { BASE, WORKS, FILTERS } from './data'
+import { useEffect, useState } from 'react'
+import { BASE, WORKS, getContentImages } from './data'
 import Reveal from './Reveal'
+import Sidebar from './Sidebar'
 
 /**
  * 首頁：
- * - 固定左欄（文字標示、選單、斜體社群連結）：CLIENT WORK / PERSONAL WORK 篩選
+ * - 固定左欄為共用的 Sidebar（見 Sidebar.jsx），PROJECT / ILLUSTRATION 篩選是連到
+ *   #/project、#/illustration 的連結（見 App.jsx 的 categoryFromHash），從別頁點擊
+ *   也能直接回首頁套用篩選，選單不會因為換頁而消失
  * - 主區域上方另有一排標籤篩選列（Notion 的 Tags 多選欄位），兩種篩選同時套用
  * - 主區域為多欄瀑布流（CSS columns），縮圖下方固定顯示標題與標籤，點擊進入獨立頁面
  */
@@ -12,107 +15,99 @@ import Reveal from './Reveal'
 // 所有作品目前用到的標籤，依字母排序
 const ALL_TAGS = [...new Set(WORKS.flatMap((w) => w.tags || []))].sort()
 
-function Home() {
-  const [filter, setFilter] = useState(null) // null = all
+// 每個作品的內文圖片（不含 cover），給列表頁 hover 輪播用
+const HOVER_IMAGES = new Map(
+  WORKS.map((w) => {
+    const cover = w.cover ? BASE + w.cover : null
+    const images = getContentImages(w.content).filter((src) => src !== cover)
+    return [w.slug, images]
+  })
+)
+
+const HOVER_INTERVAL_MS = 1200
+
+// 列表縮圖：hover 時輪播該作品的每張圖，尺寸固定吃 cover 的比例（object-cover 疊圖，不會忽大忽小）
+// 每張圖各自疊成一層、用 opacity 切換，讓瀏覽器對「上一張淡出、下一張淡入」做真正的 crossfade；
+// hover 時把 cover 也淡出（而不是疊在最底層），PNG 透空的地方才不會看到 cover 的底圖穿出來
+function WorkCard({ item, delay }) {
+  const images = HOVER_IMAGES.get(item.slug) || []
+  const [hovering, setHovering] = useState(false)
+  const [activated, setActivated] = useState(false) // 第一次 hover 才開始載入輪播圖，避免沒 hover 過的卡片也預先抓圖
+  const [index, setIndex] = useState(0)
+  const showCarousel = hovering && images.length > 0
+
+  useEffect(() => {
+    if (!hovering || images.length === 0) return
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % images.length)
+    }, HOVER_INTERVAL_MS)
+    return () => clearInterval(id)
+  }, [hovering, images.length])
+
+  return (
+    <Reveal delay={delay} className='mb-8 break-inside-avoid'>
+      <figure>
+        <a
+          href={`#/work/${item.slug}`}
+          className='block w-full group'
+          aria-label={`View ${item.title}`}
+          onMouseEnter={() => { setHovering(true); setActivated(true) }}
+          onMouseLeave={() => { setHovering(false); setIndex(0) }}
+        >
+          {item.cover ? (
+            <div className='relative w-full overflow-hidden bg-neutral-100'>
+              <img
+                src={BASE + item.cover}
+                alt={item.title}
+                loading='lazy'
+                className='w-full h-auto block transition-opacity duration-500'
+                style={{ opacity: showCarousel ? 0 : 1 }}
+              />
+              {activated &&
+                images.map((src, i) => (
+                  <img
+                    key={src}
+                    src={src}
+                    alt=''
+                    aria-hidden='true'
+                    className='absolute inset-0 w-full h-full object-cover transition-opacity duration-500'
+                    style={{ opacity: showCarousel && i === index ? 1 : 0 }}
+                  />
+                ))}
+            </div>
+          ) : (
+            // Notion 尚未上傳 Cover 時的暫代區塊
+            <div className='aspect-[4/3] bg-neutral-100 flex items-center justify-center text-neutral-400 text-sm tracking-widest'>
+              {item.title}
+            </div>
+          )}
+        </a>
+        {/* 固定顯示標題與標籤 */}
+        <figcaption className='mt-3'>
+          <div className='font-bold tracking-wide text-sm'>{item.title}</div>
+          {item.tags?.length > 0 && (
+            <div className='mt-1 text-xs tracking-wide text-neutral-400'>
+              {item.tags.map((t) => `#${t}`).join(' ')}
+            </div>
+          )}
+        </figcaption>
+      </figure>
+    </Reveal>
+  )
+}
+
+function Home({ category = null }) {
   const [tagFilter, setTagFilter] = useState(null) // null = all
-  const [menuOpen, setMenuOpen] = useState(false) // 行動版漢堡選單
 
   const items = WORKS.filter(
     (w) =>
-      (filter === null || w.category === filter) &&
+      (category === null || w.category === category) &&
       (tagFilter === null || (w.tags || []).includes(tagFilter))
   )
 
   return (
     <div className='min-h-screen bg-white font-serif text-neutral-800'>
-      {/* 固定左欄 */}
-      <aside className='fixed left-6 md:left-10 top-0 z-20 pt-10 md:pt-14 w-56 hidden md:flex flex-col h-full'>
-        <a href='#/' className='block mb-10 hover:opacity-60 transition-opacity'>
-          <img src={BASE + 'logo.svg'} alt='一元復始' className='h-[80px] w-auto' />
-        </a>
-
-        <nav className='flex flex-col gap-4 text-[13px] tracking-[0.15em] text-neutral-700'>
-          <button
-            className={`text-left hover:opacity-50 transition-opacity ${filter === null ? 'underline underline-offset-4' : ''}`}
-            onClick={() => setFilter(null)}
-          >
-            ALL WORK
-          </button>
-          {FILTERS.map((f) => (
-            <button
-              key={f.key}
-              className={`text-left hover:opacity-50 transition-opacity ${filter === f.key ? 'underline underline-offset-4' : ''}`}
-              onClick={() => setFilter(f.key)}
-            >
-              {f.label}
-            </button>
-          ))}
-          <a href='#/about' className='hover:opacity-50 transition-opacity'>
-            PROFILE
-          </a>
-          <a href='#/contact' className='hover:opacity-50 transition-opacity'>
-            CONTACT
-          </a>
-        </nav>
-
-        <div className='mt-14 text-sm italic text-neutral-600'>
-          <div className='flex flex-col gap-2 items-start'>
-            <a
-              href='https://www.instagram.com/enn.illust/'
-              target='_blank'
-              rel='noreferrer'
-              aria-label='Instagram'
-              className='block hover:opacity-50 transition-opacity'
-            >
-              <img src={BASE + 'ins.svg'} alt='Instagram' className='w-5 h-5' />
-            </a>
-            <a href='mailto:enntang.work@gmail.com' className='not-italic hover:opacity-50 transition-opacity'>enntang.work@gmail.com</a>
-          </div>
-        </div>
-      </aside>
-
-      {/* 行動版頂部列 */}
-      <header className='md:hidden sticky top-0 z-20 bg-white/90 backdrop-blur'>
-        <div className='px-8 py-4 flex items-center justify-between'>
-          <a href='#/' className='block shrink-0'>
-            <img src={BASE + 'logo.svg'} alt='一元復始' className='h-[60px] w-auto' />
-          </a>
-          <button
-            aria-label={menuOpen ? '關閉選單' : '開啟選單'}
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((v) => !v)}
-            className='text-2xl leading-none px-1'
-          >
-            {menuOpen ? '✕' : '☰'}
-          </button>
-        </div>
-
-        {menuOpen && (
-          <nav className='px-8 pb-6 flex flex-col gap-4 text-sm tracking-[0.15em] text-neutral-700 border-t border-neutral-100 pt-5'>
-            <button
-              className={`text-left hover:opacity-50 transition-opacity ${filter === null ? 'underline underline-offset-4' : ''}`}
-              onClick={() => { setFilter(null); setMenuOpen(false) }}
-            >
-              ALL WORK
-            </button>
-            {FILTERS.map((f) => (
-              <button
-                key={f.key}
-                className={`text-left hover:opacity-50 transition-opacity ${filter === f.key ? 'underline underline-offset-4' : ''}`}
-                onClick={() => { setFilter(f.key); setMenuOpen(false) }}
-              >
-                {f.label}
-              </button>
-            ))}
-            <a href='#/about' className='hover:opacity-50 transition-opacity'>
-              PROFILE
-            </a>
-            <a href='#/contact' className='hover:opacity-50 transition-opacity'>
-              CONTACT
-            </a>
-          </nav>
-        )}
-      </header>
+      <Sidebar active={category ?? 'all'} />
 
       {/* 瀑布流主區域 */}
       <main className='pl-8 pr-8 md:pl-72 md:pr-24 pt-10 md:pt-14 pb-24'>
@@ -139,38 +134,7 @@ function Home() {
 
         <div className='columns-1 sm:columns-2 xl:columns-3 gap-8 [column-fill:balance]'>
           {items.map((item, i) => (
-            <Reveal key={item.slug} delay={(i % 4) * 90} className='mb-8 break-inside-avoid'>
-              <figure>
-                <a
-                  href={`#/work/${item.slug}`}
-                  className='block w-full group'
-                  aria-label={`View ${item.title}`}
-                >
-                  {item.cover ? (
-                    <img
-                      src={BASE + item.cover}
-                      alt={item.title}
-                      loading='lazy'
-                      className='w-full h-auto block transition-opacity duration-300 group-hover:opacity-80'
-                    />
-                  ) : (
-                    // Notion 尚未上傳 Cover 時的暫代區塊
-                    <div className='aspect-[4/3] bg-neutral-100 flex items-center justify-center text-neutral-400 text-sm tracking-widest'>
-                      {item.title}
-                    </div>
-                  )}
-                </a>
-                {/* 固定顯示標題與標籤 */}
-                <figcaption className='mt-3'>
-                  <div className='font-bold tracking-wide text-sm'>{item.title}</div>
-                  {item.tags?.length > 0 && (
-                    <div className='mt-1 text-xs tracking-wide text-neutral-400'>
-                      {item.tags.map((t) => `#${t}`).join(' ')}
-                    </div>
-                  )}
-                </figcaption>
-              </figure>
-            </Reveal>
+            <WorkCard key={item.slug} item={item} delay={(i % 4) * 90} />
           ))}
         </div>
 

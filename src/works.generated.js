@@ -4,9 +4,8 @@ export const WORKS = [
   {
     "slug": "penguin-territory",
     "title": "企鵝搶地",
-    "category": "personal",
+    "category": "project",
     "tags": [
-      "Illustration",
       "Game UI"
     ],
     "date": "2024-09-01",
@@ -21,10 +20,8 @@ export const WORKS = [
   {
     "slug": "kiwi-buddies",
     "title": "Kiwi buddies",
-    "category": "personal",
-    "tags": [
-      "Illustration"
-    ],
+    "category": "illustration",
+    "tags": [],
     "date": "2022-01-15",
     "year": "2022",
     "englishName": "Kiwi buddies",
@@ -37,9 +34,8 @@ export const WORKS = [
   {
     "slug": "year-of-the-tiger",
     "title": "虎年紀念悠遊卡",
-    "category": "personal",
+    "category": "project",
     "tags": [
-      "Illustration",
       "Graphic Design"
     ],
     "date": "2022-01-03",
@@ -54,9 +50,8 @@ export const WORKS = [
   {
     "slug": "history-text-book",
     "title": "南一書局高中歷史課本《給年輕史家的漫遊指南》",
-    "category": "client",
+    "category": "project",
     "tags": [
-      "Illustration",
       "Graphic Design"
     ],
     "date": "2018-11-01",
@@ -71,10 +66,8 @@ export const WORKS = [
   {
     "slug": "tainan-scene",
     "title": "台南一隅",
-    "category": "personal",
-    "tags": [
-      "Illustration"
-    ],
+    "category": "illustration",
+    "tags": [],
     "date": "2018-03-04",
     "year": "2018",
     "englishName": "",

@@ -9,12 +9,23 @@ import { WORKS } from './data'
 /**
  * Enn Studio — 接案作品目錄
  * 以 hash 路由切換頁面（不需額外套件，靜態主機也能部署）：
- * - #/            首頁（瀑布流），見 Home.jsx
- * - #/work/<slug> 作品獨立頁面，見 WorkDetail.jsx
- * - #/wallpapers  手機桌布下載頁，見 Wallpapers.jsx
- * - #/about       個人簡介頁，見 About.jsx
- * - #/contact     聯絡頁，見 Contact.jsx
+ * - #/                首頁（瀑布流，不篩選），見 Home.jsx
+ * - #/project         首頁，篩選 category=project
+ * - #/illustration    首頁，篩選 category=illustration
+ * - #/work/<slug>     作品獨立頁面，見 WorkDetail.jsx
+ * - #/wallpapers      手機桌布下載頁，見 Wallpapers.jsx
+ * - #/about           個人簡介頁，見 About.jsx
+ * - #/contact         聯絡頁，見 Contact.jsx
+ *
+ * PROJECT / ILLUSTRATION 篩選走 hash 路由（而不只是 Home 內部 state），
+ * 這樣 Sidebar.jsx 的選單在任何頁面點擊都能直接導回首頁並套用篩選。
  */
+
+function categoryFromHash(hash) {
+  if (hash.startsWith('#/project')) return 'project'
+  if (hash.startsWith('#/illustration')) return 'illustration'
+  return null
+}
 
 function useHashRoute() {
   const [hash, setHash] = useState(() => window.location.hash)
@@ -52,7 +63,7 @@ function App() {
     return <Contact />
   }
 
-  return <Home />
+  return <Home category={categoryFromHash(hash)} />
 }
 
 export default App

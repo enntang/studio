@@ -1,31 +1,18 @@
-import { BASE } from './data'
+import Sidebar from './Sidebar'
 
 /**
  * 聯絡頁（版面參照 zaoridraws.cargo.site 的 Contact 頁）：
- * - 左欄：文字標示（回首頁）、返回連結
+ * - 左欄：跟首頁共用的 Sidebar（見 Sidebar.jsx），選單維持完整、CONTACT 為 active 狀態
  * - 右側：聯絡方式、洽詢時需要提供的資訊、報價說明
  *
  * 文字內容目前是預留內容，請直接改這個檔案裡的文字。
  */
 function Contact() {
   return (
-    <div className='min-h-screen bg-white font-serif text-neutral-800 md:grid md:grid-cols-[18rem_1fr]'>
-      <aside className='px-8 md:pl-10 md:pr-6 pt-10 md:pt-14 md:sticky md:top-0 md:h-screen flex flex-col'>
-        <a href='#/' className='flex justify-center md:block mb-12 hover:opacity-60 transition-opacity'>
-          <img src={BASE + 'logo.svg'} alt='一元復始' className='h-[60px] md:h-[80px] w-auto' />
-        </a>
+    <div className='min-h-screen bg-white font-serif text-neutral-800'>
+      <Sidebar active='contact' />
 
-        <h1 className='text-sm tracking-[0.3em] text-neutral-500'>CONTACT</h1>
-
-        <a
-          href='#/'
-          className='mt-12 md:mt-auto md:mb-14 text-[13px] tracking-[0.15em] text-neutral-700 hover:opacity-50 transition-opacity'
-        >
-          ← ALL WORK
-        </a>
-      </aside>
-
-      <main className='px-8 md:pl-0 md:pr-24 pt-8 md:pt-14 pb-24 max-w-2xl text-sm leading-relaxed text-neutral-600'>
+      <main className='pl-8 pr-8 md:pl-72 md:pr-24 pt-10 md:pt-14 pb-24 max-w-2xl text-sm leading-relaxed text-neutral-600'>
         {/* 以下為預留文字，請改成你自己的聯絡說明 */}
         <p className='mb-4'>Hello，我是 Enn Tang。</p>
         <p className='mb-2'>歡迎各式商業合作與委託洽詢，請來信至：</p>
