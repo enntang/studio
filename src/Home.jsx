@@ -57,9 +57,17 @@ function Home() {
 
         <div className='mt-14 text-sm italic text-neutral-600'>
           <span aria-hidden='true' className='block not-italic mb-2'>↘</span>
-          <div className='flex flex-col gap-1'>
-            <a href='https://instagram.com' target='_blank' rel='noreferrer' className='hover:opacity-50 transition-opacity'>Instagram</a>
-            <a href='mailto:enntang.work@gmail.com' className='hover:opacity-50 transition-opacity'>enntang.work@gmail.com</a>
+          <div className='flex flex-col gap-2 items-start'>
+            <a
+              href='https://www.instagram.com/enn.illust/'
+              target='_blank'
+              rel='noreferrer'
+              aria-label='Instagram'
+              className='block hover:opacity-50 transition-opacity'
+            >
+              <img src={BASE + 'ins.svg'} alt='Instagram' className='w-5 h-5' />
+            </a>
+            <a href='mailto:enntang.work@gmail.com' className='not-italic hover:opacity-50 transition-opacity'>enntang.work@gmail.com</a>
           </div>
         </div>
       </aside>

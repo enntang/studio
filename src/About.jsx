@@ -52,7 +52,7 @@ function About() {
           <div>
             近期動態 →{' '}
             <a
-              href='https://instagram.com'
+              href='https://www.instagram.com/enn.illust/'
               target='_blank'
               rel='noreferrer'
               className='font-bold underline underline-offset-4 hover:opacity-60'
