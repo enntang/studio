@@ -5,6 +5,7 @@ import { join, dirname, extname } from 'path'
 import { fileURLToPath } from 'url'
 import https from 'https'
 import http from 'http'
+import heicConvert from 'heic-convert'
 
 /**
  * 從 Notion 的 Works 資料庫同步作品到網站（作法沿用 portfolio 專案的 notion-sync）。
@@ -35,6 +36,13 @@ const n2m = new NotionToMarkdown({ notionClient: notion })
 // （main() 的迴圈在處理每件作品前會更新這個值；同步是逐一序列處理，不會有並發衝突）
 let currentSlug = ''
 
+// 每處理一組兩欄／多欄區塊就遞增，確保檔名不會撞名。
+// 原本用 block.id.slice(0, 8) 當識別碼，但這個 Notion workspace 底下所有 block id
+// 的前 8 碼都相同（3a2bba8d...），導致所有作品的兩欄圖片都算出同一組檔名、
+// 後面下載的圖片直接覆蓋前面的——這就是為什麼網站上不同作品的兩欄圖片會變成同一張。
+// 改用遞增計數器就不會有這個問題。
+let colGroupCounter = 0
+
 // Notion 的「兩欄／多欄」排版在 API 裡是 column_list > column > 區塊 的巢狀結構。
 // notion-to-md 預設不會保留並排關係，這裡改成手動抓子區塊、把每欄內的圖片下載下來，
 // 輸出成一段 grid 排版的 HTML（網站那邊用 rehype-raw 讓 react-markdown 直接渲染這段 HTML）。
@@ -43,6 +51,8 @@ n2m.setCustomTransformer('column_list', async (block) => {
   const columns = columnsResp.results.filter((b) => b.type === 'column')
   if (columns.length === 0) return ''
 
+  colGroupCounter++
+  const groupId = colGroupCounter
   const colsClass = columns.length >= 3 ? 'grid-cols-3' : 'grid-cols-2'
   const columnHtml = []
 
@@ -55,7 +65,7 @@ n2m.setCustomTransformer('column_list', async (block) => {
       const url = b.image?.type === 'file' ? b.image.file?.url : b.image?.external?.url
       if (!url) continue
       imgIdx++
-      const localPath = await downloadImage(url, currentSlug, `col-${block.id.slice(0, 8)}-${c}-${imgIdx}`)
+      const localPath = await downloadImage(url, currentSlug, `col${groupId}-${c}-${imgIdx}`)
       if (localPath) imgTags.push(`<img src="${localPath}" alt="" class="w-full h-auto block" />`)
     }
     columnHtml.push(`<div>${imgTags.join('')}</div>`)
@@ -246,7 +256,10 @@ async function downloadImage(url, slug, name) {
     }
 
     const urlPath = new URL(url).pathname
-    let ext = extname(urlPath).split('?')[0] || '.png'
+    const sourceExt = extname(urlPath).split('?')[0].toLowerCase()
+    const isHeic = sourceExt === '.heic' || sourceExt === '.heif'
+
+    let ext = sourceExt || '.png'
     if (!ext.match(/^\.(jpg|jpeg|png|gif|webp|svg)$/i)) {
       ext = '.png'
     }
@@ -255,7 +268,14 @@ async function downloadImage(url, slug, name) {
     const filepath = join(imageDir, filename)
     const publicPath = `/work-images/${slug}/${filename}`
 
-    await downloadFile(url, filepath)
+    if (isHeic) {
+      // 瀏覽器無法直接顯示 HEIC，下載後轉成 PNG 再存檔
+      const inputBuffer = await downloadBuffer(url)
+      const outputBuffer = await heicConvert({ buffer: inputBuffer, format: 'PNG' })
+      writeFileSync(filepath, outputBuffer)
+    } else {
+      await downloadFile(url, filepath)
+    }
 
     return publicPath
   } catch (error) {
@@ -286,6 +306,35 @@ function downloadFile(url, filepath) {
         resolve()
       })
       file.on('error', reject)
+    })
+
+    request.on('error', reject)
+    request.setTimeout(30000, () => {
+      request.destroy()
+      reject(new Error('Timeout'))
+    })
+  })
+}
+
+function downloadBuffer(url) {
+  return new Promise((resolve, reject) => {
+    const protocol = url.startsWith('https') ? https : http
+
+    const request = protocol.get(url, (response) => {
+      if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
+        downloadBuffer(response.headers.location).then(resolve).catch(reject)
+        return
+      }
+
+      if (response.statusCode !== 200) {
+        reject(new Error(`HTTP ${response.statusCode}`))
+        return
+      }
+
+      const chunks = []
+      response.on('data', (chunk) => chunks.push(chunk))
+      response.on('end', () => resolve(Buffer.concat(chunks)))
+      response.on('error', reject)
     })
 
     request.on('error', reject)

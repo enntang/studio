@@ -4,6 +4,7 @@ import { join, dirname, extname } from 'path'
 import { fileURLToPath } from 'url'
 import https from 'https'
 import http from 'http'
+import heicConvert from 'heic-convert'
 
 /**
  * 從 Notion 的 Wallpapers 資料庫同步手機桌布到網站。
@@ -187,7 +188,10 @@ async function downloadImage(url, slug, name) {
     }
 
     const urlPath = new URL(url).pathname
-    let ext = extname(urlPath).split('?')[0] || '.png'
+    const sourceExt = extname(urlPath).split('?')[0].toLowerCase()
+    const isHeic = sourceExt === '.heic' || sourceExt === '.heif'
+
+    let ext = sourceExt || '.png'
     if (!ext.match(/^\.(jpg|jpeg|png|gif|webp|svg)$/i)) {
       ext = '.png'
     }
@@ -197,7 +201,14 @@ async function downloadImage(url, slug, name) {
     // 縮圖路徑不帶開頭斜線，前端以 BASE + path 組合
     const publicPath = `wallpaper-images/${slug}/${filename}`
 
-    await downloadFile(url, filepath)
+    if (isHeic) {
+      // 瀏覽器無法直接顯示 HEIC，下載後轉成 PNG 再存檔
+      const inputBuffer = await downloadBuffer(url)
+      const outputBuffer = await heicConvert({ buffer: inputBuffer, format: 'PNG' })
+      writeFileSync(filepath, outputBuffer)
+    } else {
+      await downloadFile(url, filepath)
+    }
 
     return publicPath
   } catch (error) {
@@ -228,6 +239,35 @@ function downloadFile(url, filepath) {
         resolve()
       })
       file.on('error', reject)
+    })
+
+    request.on('error', reject)
+    request.setTimeout(30000, () => {
+      request.destroy()
+      reject(new Error('Timeout'))
+    })
+  })
+}
+
+function downloadBuffer(url) {
+  return new Promise((resolve, reject) => {
+    const protocol = url.startsWith('https') ? https : http
+
+    const request = protocol.get(url, (response) => {
+      if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
+        downloadBuffer(response.headers.location).then(resolve).catch(reject)
+        return
+      }
+
+      if (response.statusCode !== 200) {
+        reject(new Error(`HTTP ${response.statusCode}`))
+        return
+      }
+
+      const chunks = []
+      response.on('data', (chunk) => chunks.push(chunk))
+      response.on('end', () => resolve(Buffer.concat(chunks)))
+      response.on('error', reject)
     })
 
     request.on('error', reject)
