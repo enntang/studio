@@ -12,9 +12,6 @@ import Sidebar from './Sidebar'
  * - 主區域為多欄瀑布流（CSS columns），縮圖下方固定顯示標題與標籤，點擊進入獨立頁面
  */
 
-// 所有作品目前用到的標籤，依字母排序
-const ALL_TAGS = [...new Set(WORKS.flatMap((w) => w.tags || []))].sort()
-
 // 每個作品的內文圖片（不含 cover），給列表頁 hover 輪播用
 const HOVER_IMAGES = new Map(
   WORKS.map((w) => {
@@ -99,10 +96,17 @@ function WorkCard({ item, delay }) {
 function Home({ category = null }) {
   const [tagFilter, setTagFilter] = useState(null) // null = all
 
-  const items = WORKS.filter(
-    (w) =>
-      (category === null || w.category === category) &&
-      (tagFilter === null || (w.tags || []).includes(tagFilter))
+  // 切換分類時重置標籤篩選，避免帶著上個分類的標籤導致清單意外變空
+  useEffect(() => {
+    setTagFilter(null)
+  }, [category])
+
+  // 標籤只從目前分類的作品收集，illustration 目前沒有標籤，篩選列就不會顯示
+  const categoryWorks = WORKS.filter((w) => category === null || w.category === category)
+  const ALL_TAGS = [...new Set(categoryWorks.flatMap((w) => w.tags || []))].sort()
+
+  const items = categoryWorks.filter(
+    (w) => tagFilter === null || (w.tags || []).includes(tagFilter)
   )
 
   return (
