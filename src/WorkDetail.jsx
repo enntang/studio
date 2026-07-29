@@ -2,6 +2,7 @@ import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import { BASE } from './data'
 import Reveal from './Reveal'
+import ZoomImage from './ZoomImage'
 
 /**
  * 作品獨立頁面（版面參照 jiaanzhuang.com 的作品頁）：
@@ -32,7 +33,7 @@ const mdComponents = {
   },
   img: ({ src, alt }) => (
     <Reveal className='mb-8'>
-      <img src={resolveSrc(src)} alt={alt || ''} className='w-full h-auto block' />
+      <ZoomImage src={resolveSrc(src)} alt={alt || ''} className='w-full h-auto block' />
     </Reveal>
   ),
   h1: ({ children }) => (
@@ -103,7 +104,7 @@ function WorkDetail({ work }) {
         ) : (
           (work.images || [work.cover]).filter(Boolean).map((src, i) => (
             <Reveal key={src} delay={i * 100} className='mb-8'>
-              <img
+              <ZoomImage
                 src={BASE + src}
                 alt={work.title}
                 className='w-full h-auto block'
