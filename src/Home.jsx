@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { BASE, WORKS, getContentImages } from './data'
+import Hero from './Hero'
 import Reveal from './Reveal'
 import Sidebar from './Sidebar'
 
@@ -115,6 +116,9 @@ function Home({ category = null }) {
 
       {/* 瀑布流主區域 */}
       <main className='pl-8 pr-8 md:pl-72 md:pr-24 pt-10 md:pt-14 pb-24'>
+        {/* 大圖輪播只放在未篩選的首頁，進到 PROJECT／ILLUSTRATION 就直接看清單 */}
+        {category === null && <Hero />}
+
         {/* 標籤篩選列 */}
         {ALL_TAGS.length > 0 && (
           <div className='flex flex-wrap gap-x-5 gap-y-2 mb-10 text-[13px] tracking-[0.1em] text-neutral-500'>

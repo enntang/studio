@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Home from './Home'
+import Loading from './Loading'
 import WorkDetail from './WorkDetail'
 import Wallpapers from './Wallpapers'
 import About from './About'
@@ -45,6 +46,16 @@ function App() {
     if (hash.startsWith('#/')) window.scrollTo(0, 0)
   }, [hash])
 
+  // Loading 掛在路由外層，換頁時不會重新出現（它只在首次載入時擋畫面）
+  return (
+    <>
+      <Loading />
+      {renderPage(hash)}
+    </>
+  )
+}
+
+function renderPage(hash) {
   const workMatch = hash.match(/^#\/work\/([^/]+)/)
   if (workMatch) {
     const work = WORKS.find((w) => w.slug === workMatch[1])

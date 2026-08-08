@@ -28,6 +28,9 @@ export function getContentImages(content) {
 // 桌布資料來自 Notion（npm run sync 產生），見 wallpapers.generated.js
 export { WALLPAPERS } from './wallpapers.generated'
 
+// 首頁大圖輪播資料來自 Notion（npm run sync 產生），見 slider.generated.js
+export { HERO_SLIDES } from './slider.generated'
+
 export const FILTERS = [
   { key: 'project', label: 'PROJECT' },
   { key: 'illustration', label: 'ILLUSTRATION' },

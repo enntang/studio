@@ -36,10 +36,12 @@ jobs:
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
           NOTION_WALLPAPERS_DATABASE_ID: ${{ secrets.NOTION_WALLPAPERS_DATABASE_ID }}
+          NOTION_SLIDER_DATABASE_ID: ${{ secrets.NOTION_SLIDER_DATABASE_ID }}
         run: |
           cd scripts/notion-sync
           node index.mjs
           node wallpapers.mjs
+          node slider.mjs
 
       - name: Check for changes
         id: changes

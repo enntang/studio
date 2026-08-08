@@ -23,11 +23,8 @@ function About() {
         <h2 className='text-xl font-bold tracking-wide mb-4'>Enn Tang</h2>
 
         {/* 以下為預留文字，請改成你自己的簡介 */}
-        <p className='text-sm leading-relaxed text-neutral-600 mb-4'>
-          台灣接案設計師與插畫家。作品橫跨 UI / UX 設計、插畫、品牌視覺等領域。
-        </p>
         <p className='text-sm leading-relaxed text-neutral-600 mb-10'>
-          （這裡放更多關於你的介紹文字，例如創作理念、擅長領域、合作經驗等。）
+          台灣接案設計師與插畫家。作品橫跨 UI / UX 設計、插畫、品牌視覺等領域。
         </p>
 
         <h3 className='text-xs tracking-[0.2em] text-neutral-400 mb-3'>學歷</h3>
