@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import Home from './Home'
 import Loading from './Loading'
 import WorkDetail from './WorkDetail'
-import Wallpapers from './Wallpapers'
 import About from './About'
 import Contact from './Contact'
 import { WORKS } from './data'
@@ -14,7 +13,6 @@ import { WORKS } from './data'
  * - #/project         首頁，篩選 category=project
  * - #/illustration    首頁，篩選 category=illustration
  * - #/work/<slug>     作品獨立頁面，見 WorkDetail.jsx
- * - #/wallpapers      手機桌布下載頁，見 Wallpapers.jsx
  * - #/about           個人簡介頁，見 About.jsx
  * - #/contact         聯絡頁，見 Contact.jsx
  *
@@ -60,10 +58,6 @@ function renderPage(hash) {
   if (workMatch) {
     const work = WORKS.find((w) => w.slug === workMatch[1])
     if (work) return <WorkDetail work={work} />
-  }
-
-  if (hash.startsWith('#/wallpapers')) {
-    return <Wallpapers />
   }
 
   if (hash.startsWith('#/about')) {
