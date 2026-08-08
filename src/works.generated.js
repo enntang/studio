@@ -2,6 +2,20 @@
 // 作品的新增與修改請到 Notion 的 Works 資料庫操作。
 export const WORKS = [
   {
+    "slug": "you-are-not-here",
+    "title": "你不在的地方",
+    "category": "illustration",
+    "tags": [],
+    "date": "2026-08-08",
+    "year": "2026",
+    "englishName": "YOU ARE NOT HERE",
+    "client": "",
+    "design": "",
+    "description": "",
+    "cover": "work-images/you-are-not-here/cover.png",
+    "content": "\n![Document.png](/work-images/you-are-not-here/image-1.png)\n\n\n![Mockuuups_Paperback_mockup_on_a_red_metal_shelf_with_plants.jpeg](/work-images/you-are-not-here/image-2.jpeg)\n\n\n![Document.png](/work-images/you-are-not-here/image-3.png)\n\n"
+  },
+  {
     "slug": "penguin-territory",
     "title": "企鵝搶地",
     "category": "project",
@@ -71,7 +85,7 @@ export const WORKS = [
     "tags": [],
     "date": "2018-03-04",
     "year": "2018",
-    "englishName": "",
+    "englishName": "Tainan",
     "client": "",
     "design": "",
     "description": "",
