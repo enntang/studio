@@ -17,7 +17,7 @@ export const WORKS = [
   },
   {
     "slug": "penguin-territory",
-    "title": "企鵝搶地",
+    "title": "網頁遊戲 UI / 美術設計《企鵝搶地》",
     "category": "project",
     "tags": [
       "Web Design",
@@ -48,7 +48,7 @@ export const WORKS = [
   },
   {
     "slug": "year-of-the-tiger",
-    "title": "虎年紀念悠遊卡",
+    "title": "悠遊卡插畫設計《虎年大吉大利》",
     "category": "project",
     "tags": [
       "Graphic"
