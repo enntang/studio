@@ -32,10 +32,10 @@ function About() {
           style={{ animationDelay: `${entranceDelay}ms` }}
         >
           <img
-            src={BASE + 'about-illustration.png'}
+            src={BASE + 'about-illustration.webp'}
             alt='Enn Tang 與貓'
-            width={2217}
-            height={1202}
+            width={2048}
+            height={1110}
             className='w-full h-auto block'
           />
         </div>

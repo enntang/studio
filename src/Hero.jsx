@@ -14,6 +14,9 @@ import { BASE, HERO_SLIDES } from './data'
  */
 
 // 一張圖的完整週期 = ENTER + HOLD + EXIT
+const CURSOR_OFFSET = 16 // 小標離游標的距離，避免壓在游標下面
+const CURSOR_LABEL_W = 96 // 小標的概略寬度，用來判斷靠近右邊緣時要不要翻邊
+
 const ENTER_MS = 1000
 const HOLD_MS = 2200
 const EXIT_MS = 600
@@ -53,6 +56,7 @@ function Hero() {
   // 初始值直接讀 document.hidden：visibilitychange 只在「切換」時觸發，
   // 頁面本來就在背景分頁載入的話不會有事件，寫死 false 會讓它照樣空轉
   const [hidden, setHidden] = useState(() => document.hidden)
+  const [cursor, setCursor] = useState(null) // 游標小標的位置，null 代表滑鼠不在上面
 
   const go = useCallback(
     (delta) => setSlide((s) => ({ index: (s.index + delta + total) % total, phase: 'enter' })),
@@ -107,18 +111,28 @@ function Hero() {
 
   const current = slides[index]
 
+  // 游標旁的小標。滑鼠移入才有值，移出設回 null；觸控裝置不會觸發 mousemove，
+  // 所以自然不會出現。座標是相對 section 的，不是頁面絕對座標
+  const onMouseMove = (e) => {
+    const r = e.currentTarget.getBoundingClientRect()
+    setCursor({ x: e.clientX - r.left, y: e.clientY - r.top, w: r.width, h: r.height })
+  }
+
   return (
     <section
       tabIndex={0}
       onKeyDown={onKeyDown}
+      onMouseMove={current.href ? onMouseMove : undefined}
+      onMouseLeave={() => setCursor(null)}
       aria-roledescription='carousel'
       aria-label='精選作品'
-      className='relative h-screen [@supports(height:100svh)]:h-[100svh] overflow-hidden bg-surface-subtle outline-none'
+      className={`relative h-screen [@supports(height:100svh)]:h-[100svh] overflow-hidden bg-surface-subtle outline-none ${
+        current.href ? 'cursor-pointer' : ''
+      }`}
     >
       {/* 整張大圖是連到該作品的連結。href 來自 Notion 的 Work 欄位（同步時已換算成
-          站內網址），沒填的話就不包 <a>，避免出現點了沒反應的死連結。
-          group 讓底部標題能跟著 hover 出現底線，給一點「這裡可以點」的提示 */}
-      <LinkOrDiv href={current.href} title={current.title} className='group block h-full'>
+          站內網址），沒填的話就不包 <a>，避免出現點了沒反應的死連結 */}
+      <LinkOrDiv href={current.href} title={current.title} className='block h-full'>
         {/* 圖層。只有目前這張會播動畫，其餘保持 opacity-0 在背景待命（順便預載）。
             動畫類別名稱一換，瀏覽器就會重播，所以不需要靠 key 強制重新掛載 */}
         <div className='relative h-full'>
@@ -152,9 +166,7 @@ function Hero() {
               phase === 'exit' ? 'motion-safe:animate-hero-text-out' : 'motion-safe:animate-hero-text-in'
             }`}
           >
-            <h2 className='text-2xl md:text-4xl font-bold tracking-wide underline-offset-8 group-hover:underline'>
-              {current.title}
-            </h2>
+            <h2 className='text-2xl md:text-4xl font-bold tracking-wide'>{current.title}</h2>
             {current.label && (
               <p className='mt-3 text-xs md:text-sm tracking-[0.2em] opacity-85'>{current.label}</p>
             )}
@@ -177,6 +189,21 @@ function Hero() {
           </div>
         </div>
       </LinkOrDiv>
+
+      {/* 跟隨游標的小標。放在 LinkOrDiv 外面，才不會被連結的內容蓋住；
+          pointer-events-none 讓它不擋點擊。靠近右／下邊緣時翻到游標另一側，
+          否則會被 section 的 overflow-hidden 裁掉 */}
+      {cursor && (
+        <div
+          className='absolute z-10 px-3 py-1.5 rounded-full bg-white/90 text-ink text-xs tracking-wide shadow-md pointer-events-none'
+          style={{
+            left: cursor.x + (cursor.x > cursor.w - CURSOR_LABEL_W ? -CURSOR_LABEL_W : CURSOR_OFFSET),
+            top: cursor.y + (cursor.y > cursor.h - 60 ? -40 : CURSOR_OFFSET),
+          }}
+        >
+          查看作品
+        </div>
+      )}
     </section>
   )
 }

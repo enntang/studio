@@ -31,9 +31,9 @@ export { HERO_SLIDES } from './slider.generated'
 // 首頁「服務項目」區塊。image 是 public/ 底下的相對路徑，
 // 換圖直接覆蓋 public/service-images/ 底下的同名檔案即可。
 export const SERVICES = [
-  { key: 'uiux', name: 'UI/UX', nameZh: 'UI/UX 設計', image: 'service-images/UIUX.png' },
-  { key: 'illustration', name: 'ILLUSTRATION', nameZh: '插畫設計', image: 'service-images/illustration.png' },
-  { key: 'graphic', name: 'GRAPHIC', nameZh: '平面設計', image: 'service-images/graphic.png' },
+  { key: 'uiux', name: 'UI/UX', nameZh: 'UI/UX 設計', image: 'service-images/UIUX.webp' },
+  { key: 'illustration', name: 'ILLUSTRATION', nameZh: '插畫設計', image: 'service-images/illustration.webp' },
+  { key: 'graphic', name: 'GRAPHIC', nameZh: '平面設計', image: 'service-images/graphic.webp' },
 ]
 
 // 首頁 Hero Tour：一段捲動驅動的區塊。先是滿版標題，接著三組主題依序沿著弧線
