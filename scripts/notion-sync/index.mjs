@@ -1,11 +1,9 @@
 import { Client } from '@notionhq/client'
 import { NotionToMarkdown } from 'notion-to-md'
-import { writeFileSync, mkdirSync, existsSync, createWriteStream, rmSync, readFileSync } from 'fs'
-import { join, dirname, extname } from 'path'
+import { writeFileSync, existsSync, rmSync, readFileSync } from 'fs'
+import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
-import https from 'https'
-import http from 'http'
-import heicConvert from 'heic-convert'
+import { downloadImage as downloadImageShared, resetImageDir } from './lib/images.mjs'
 
 /**
  * 從 Notion 的 Works 資料庫同步作品到網站（作法沿用 portfolio 專案的 notion-sync）。
@@ -69,7 +67,7 @@ n2m.setCustomTransformer('column_list', async (block) => {
       if (!url) continue
       imgIdx++
       const localPath = await downloadImage(url, currentSlug, `col${groupId}-${c}-${imgIdx}`)
-      if (localPath) imgTags.push(`<img src="${localPath}" alt="" class="w-full h-auto block" />`)
+      if (localPath) imgTags.push(`<img src="/${localPath}" alt="" class="w-full h-auto block" />`)
     }
     columnHtml.push(`<div>${imgTags.join('')}</div>`)
   }
@@ -110,6 +108,10 @@ async function main() {
     }
 
     console.log(`📝 處理: ${title} (${slug})`)
+
+    // 先清空這件作品的圖片資料夾。每次同步都會重新下載全部圖片，不清的話
+    // 換檔案格式（例如 png → webp）或圖片減少時，舊檔會留下來變成沒人引用的孤兒
+    resetImageDir(IMAGE_DIR, slug)
 
     // 頁面內文 → Markdown，圖片下載到本地
     currentSlug = slug
@@ -237,7 +239,9 @@ async function processMarkdownImages(markdown, slug) {
     const localPath = await downloadImage(url, slug, `image-${imageIndex}`)
 
     if (localPath) {
-      processedMarkdown = processedMarkdown.replace(fullMatch, `![${alt}](${localPath})`)
+      // 內文圖片要帶開頭斜線：WorkDetail 的 resolveSrc 與 data.js 的 getContentImages
+      // 都靠這個判斷要不要接上 BASE，少了它部署在子路徑時會抓不到圖
+      processedMarkdown = processedMarkdown.replace(fullMatch, `![${alt}](/${localPath})`)
       imageCount++
     }
   }
@@ -249,105 +253,19 @@ async function processCoverImage(url, slug) {
   if (!url) return ''
   if (url.startsWith('/')) return url.slice(1)
 
-  const localPath = await downloadImage(url, slug, 'cover')
-  // 縮圖路徑不帶開頭斜線，前端以 BASE + cover 組合（與內文圖片的處理不同）
-  return localPath ? localPath.slice(1) : ''
+  // 縮圖路徑不帶開頭斜線，前端以 BASE + cover 組合（與內文圖片的處理相反）
+  return (await downloadImage(url, slug, 'cover')) || ''
 }
 
-async function downloadImage(url, slug, name) {
-  try {
-    const imageDir = join(IMAGE_DIR, slug)
-    if (!existsSync(imageDir)) {
-      mkdirSync(imageDir, { recursive: true })
-    }
-
-    const urlPath = new URL(url).pathname
-    const sourceExt = extname(urlPath).split('?')[0].toLowerCase()
-    const isHeic = sourceExt === '.heic' || sourceExt === '.heif'
-
-    let ext = sourceExt || '.png'
-    if (!ext.match(/^\.(jpg|jpeg|png|gif|webp|svg)$/i)) {
-      ext = '.png'
-    }
-
-    const filename = `${name}${ext}`
-    const filepath = join(imageDir, filename)
-    const publicPath = `/work-images/${slug}/${filename}`
-
-    if (isHeic) {
-      // 瀏覽器無法直接顯示 HEIC，下載後轉成 PNG 再存檔
-      const inputBuffer = await downloadBuffer(url)
-      const outputBuffer = await heicConvert({ buffer: inputBuffer, format: 'PNG' })
-      writeFileSync(filepath, outputBuffer)
-    } else {
-      await downloadFile(url, filepath)
-    }
-
-    return publicPath
-  } catch (error) {
-    console.error(`   ⚠️ 圖片下載失敗: ${url}`, error.message)
-    return null
-  }
-}
-
-function downloadFile(url, filepath) {
-  return new Promise((resolve, reject) => {
-    const protocol = url.startsWith('https') ? https : http
-
-    const request = protocol.get(url, (response) => {
-      if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
-        downloadFile(response.headers.location, filepath).then(resolve).catch(reject)
-        return
-      }
-
-      if (response.statusCode !== 200) {
-        reject(new Error(`HTTP ${response.statusCode}`))
-        return
-      }
-
-      const file = createWriteStream(filepath)
-      response.pipe(file)
-      file.on('finish', () => {
-        file.close()
-        resolve()
-      })
-      file.on('error', reject)
-    })
-
-    request.on('error', reject)
-    request.setTimeout(30000, () => {
-      request.destroy()
-      reject(new Error('Timeout'))
-    })
-  })
-}
-
-function downloadBuffer(url) {
-  return new Promise((resolve, reject) => {
-    const protocol = url.startsWith('https') ? https : http
-
-    const request = protocol.get(url, (response) => {
-      if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
-        downloadBuffer(response.headers.location).then(resolve).catch(reject)
-        return
-      }
-
-      if (response.statusCode !== 200) {
-        reject(new Error(`HTTP ${response.statusCode}`))
-        return
-      }
-
-      const chunks = []
-      response.on('data', (chunk) => chunks.push(chunk))
-      response.on('end', () => resolve(Buffer.concat(chunks)))
-      response.on('error', reject)
-    })
-
-    request.on('error', reject)
-    request.setTimeout(30000, () => {
-      request.destroy()
-      reject(new Error('Timeout'))
-    })
+// 下載與轉檔實作在 lib/images.mjs，兩支同步腳本共用；這裡只補上本腳本專屬的參數
+function downloadImage(url, slug, name) {
+  return downloadImageShared({
+    url,
+    imageDir: IMAGE_DIR,
+    publicPrefix: 'work-images',
+    slug,
+    name,
+    maxWidth: 1800,
   })
 }
 

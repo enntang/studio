@@ -5,15 +5,15 @@ export const HERO_SLIDES = [
     "slug": "周邊商品插畫設計",
     "title": "周邊商品插畫設計",
     "label": "悠遊卡插畫設計《虎年大吉大利》",
-    "image": "hero-images/周邊商品插畫設計/image.png",
-    "thumb": "hero-images/周邊商品插畫設計/thumb.png",
+    "image": "hero-images/周邊商品插畫設計/image.webp",
+    "thumb": "hero-images/周邊商品插畫設計/thumb.webp",
     "href": "#/work/year-of-the-tiger"
   },
   {
     "slug": "遊戲美術設計",
     "title": "遊戲美術設計",
     "label": "網頁遊戲 UI / 美術設計《企鵝搶地》",
-    "image": "hero-images/遊戲美術設計/image.png",
+    "image": "hero-images/遊戲美術設計/image.webp",
     "thumb": "",
     "href": "#/work/penguin-territory"
   }

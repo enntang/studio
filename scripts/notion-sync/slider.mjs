@@ -1,10 +1,8 @@
 import { Client } from '@notionhq/client'
-import { writeFileSync, mkdirSync, existsSync, createWriteStream, rmSync, readFileSync } from 'fs'
-import { join, dirname, extname } from 'path'
+import { writeFileSync, existsSync, rmSync, readFileSync } from 'fs'
+import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
-import https from 'https'
-import http from 'http'
-import heicConvert from 'heic-convert'
+import { downloadImage as downloadImageShared, resetImageDir } from './lib/images.mjs'
 
 /**
  * 從 Notion 的 Home Slider 資料庫同步首頁大圖輪播到網站。
@@ -71,6 +69,9 @@ async function main() {
       console.log('   ⚠️ 跳過：缺少 Image')
       continue
     }
+
+    // 理由同 index.mjs：避免換格式後留下舊檔
+    resetImageDir(IMAGE_DIR, slug)
 
     const image = await downloadImage(imageUrl, slug, 'image')
     if (!image) {
@@ -230,101 +231,15 @@ function cleanupUnpublished(publishedSlugs, syncedSlides) {
 
 // ============ 圖片處理 ============
 
-async function downloadImage(url, slug, name) {
-  try {
-    const imageDir = join(IMAGE_DIR, slug)
-    if (!existsSync(imageDir)) {
-      mkdirSync(imageDir, { recursive: true })
-    }
-
-    const urlPath = new URL(url).pathname
-    const sourceExt = extname(urlPath).split('?')[0].toLowerCase()
-    const isHeic = sourceExt === '.heic' || sourceExt === '.heif'
-
-    let ext = sourceExt || '.png'
-    if (!ext.match(/^\.(jpg|jpeg|png|gif|webp|svg)$/i)) {
-      ext = '.png'
-    }
-
-    const filename = `${name}${ext}`
-    const filepath = join(imageDir, filename)
-    // 路徑不帶開頭斜線，前端以 BASE + path 組合
-    const publicPath = `hero-images/${slug}/${filename}`
-
-    if (isHeic) {
-      // 瀏覽器無法直接顯示 HEIC，下載後轉成 PNG 再存檔
-      const inputBuffer = await downloadBuffer(url)
-      const outputBuffer = await heicConvert({ buffer: inputBuffer, format: 'PNG' })
-      writeFileSync(filepath, outputBuffer)
-    } else {
-      await downloadFile(url, filepath)
-    }
-
-    return publicPath
-  } catch (error) {
-    console.error(`   ⚠️ 圖片下載失敗: ${url}`, error.message)
-    return null
-  }
-}
-
-function downloadFile(url, filepath) {
-  return new Promise((resolve, reject) => {
-    const protocol = url.startsWith('https') ? https : http
-
-    const request = protocol.get(url, (response) => {
-      if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
-        downloadFile(response.headers.location, filepath).then(resolve).catch(reject)
-        return
-      }
-
-      if (response.statusCode !== 200) {
-        reject(new Error(`HTTP ${response.statusCode}`))
-        return
-      }
-
-      const file = createWriteStream(filepath)
-      response.pipe(file)
-      file.on('finish', () => {
-        file.close()
-        resolve()
-      })
-      file.on('error', reject)
-    })
-
-    request.on('error', reject)
-    request.setTimeout(30000, () => {
-      request.destroy()
-      reject(new Error('Timeout'))
-    })
-  })
-}
-
-function downloadBuffer(url) {
-  return new Promise((resolve, reject) => {
-    const protocol = url.startsWith('https') ? https : http
-
-    const request = protocol.get(url, (response) => {
-      if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
-        downloadBuffer(response.headers.location).then(resolve).catch(reject)
-        return
-      }
-
-      if (response.statusCode !== 200) {
-        reject(new Error(`HTTP ${response.statusCode}`))
-        return
-      }
-
-      const chunks = []
-      response.on('data', (chunk) => chunks.push(chunk))
-      response.on('end', () => resolve(Buffer.concat(chunks)))
-      response.on('error', reject)
-    })
-
-    request.on('error', reject)
-    request.setTimeout(30000, () => {
-      request.destroy()
-      reject(new Error('Timeout'))
-    })
+// 實作在 lib/images.mjs，兩支同步腳本共用；這裡只補上本腳本專屬的參數
+function downloadImage(url, slug, name) {
+  return downloadImageShared({
+    url,
+    imageDir: IMAGE_DIR,
+    publicPrefix: 'hero-images',
+    slug,
+    name,
+    maxWidth: 2560,
   })
 }
 
