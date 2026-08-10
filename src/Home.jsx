@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react'
 import { BASE, WORKS, getContentImages } from './data'
 import Hero from './Hero'
-import HeroTour from './HeroTour'
 import Reveal from './Reveal'
 import Navbar from './Navbar'
 
 /**
  * 首頁：
- * - 固定左欄為共用的 Sidebar（見 Sidebar.jsx），PROJECT / ILLUSTRATION 篩選是連到
+ * - 頂部共用的 Navbar（見 Navbar.jsx），PROJECT / ILLUSTRATION 篩選是連到
  *   #/project、#/illustration 的連結（見 App.jsx 的 categoryFromHash），從別頁點擊
  *   也能直接回首頁套用篩選，選單不會因為換頁而消失
  * - 主區域上方另有一排標籤篩選列（Notion 的 Tags 多選欄位），兩種篩選同時套用
@@ -137,8 +136,6 @@ function Home({ category = null }) {
       <main
         className={`px-8 md:px-24 pb-24 ${showHero ? 'pt-16 md:pt-20' : 'pt-28 md:pt-40'}`}
       >
-        {showHero && <HeroTour />}
-
         {/* 作品區標題。放在篩選列外面，這樣沒有標籤的分類（illustration）也看得到 */}
         <header className='mb-6'>
           <h1 className='text-2xl md:text-3xl font-bold tracking-wide text-brand'>Projects</h1>
