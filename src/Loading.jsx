@@ -19,6 +19,10 @@ const STALL_AT = 92 // 資源還沒載完時，進度條停在這個百分比
 const EXIT_MS = 900 // 白幕掀開的時間
 const FAILSAFE_MS = 6000 // 圖片壞掉或網路卡住時，最多擋這麼久
 
+// 從頁面開始載入到白幕完全掀開所需的時間。頁面裡的進場動畫可以拿這個值當延遲，
+// 避免動畫在 loading 畫面後面白白播完，使用者根本沒看到
+export const LOADING_TOTAL_MS = MIN_VISIBLE_MS + EXIT_MS
+
 function prefersReducedMotion() {
   return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
 }

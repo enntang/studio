@@ -81,6 +81,11 @@ export default {
         },
         'hero-scrim-in': { from: { opacity: '0' }, to: { opacity: '1' } },
         'hero-scrim-out': { from: { opacity: '1' }, to: { opacity: '0' } },
+        // 通用的淡入上浮，給不需要捲動偵測的進場（例如 About 首屏的主視覺）
+        'fade-up': {
+          from: { opacity: '0', transform: 'translateY(18px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
+        },
       },
       animation: {
         // both 是關鍵：動畫前後都保持在起訖值，不會播完彈回原狀
@@ -90,6 +95,7 @@ export default {
         'hero-text-out': 'hero-text-out 400ms ease-in both',
         'hero-scrim-in': 'hero-scrim-in 800ms ease-out both',
         'hero-scrim-out': 'hero-scrim-out 400ms ease-in both',
+        'fade-up': 'fade-up 800ms cubic-bezier(0.22, 1, 0.36, 1) both',
       },
       fontFamily: {
         // 全站字體。英數字走 Courier Prime（index.html 從 Google Fonts 引入），
