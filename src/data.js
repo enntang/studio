@@ -28,6 +28,32 @@ export function getContentImages(content) {
 // 首頁大圖輪播資料來自 Notion（npm run sync 產生），見 slider.generated.js
 export { HERO_SLIDES } from './slider.generated'
 
+// 首頁「服務項目」區塊。image 是 public/ 底下的相對路徑，
+// 換圖直接覆蓋 public/service-images/ 底下的同名檔案即可。
+export const SERVICES = [
+  { key: 'uiux', name: 'UI/UX', nameZh: 'UI/UX 設計', image: 'service-images/UIUX.png' },
+  { key: 'illustration', name: 'ILLUSTRATION', nameZh: '插畫設計', image: 'service-images/illustration.png' },
+  { key: 'graphic', name: 'GRAPHIC', nameZh: '平面設計', image: 'service-images/graphic.png' },
+]
+
+// 首頁 Hero Tour：一段捲動驅動的區塊。先是滿版標題，接著三組主題依序沿著弧線
+// 從右邊進場、到中心散開、再往左離場。
+//
+// 文字與圖片目前全部留空，填法：
+// - title：滿版大標
+// - scenes[].eyebrow / title / description：該組的小標、大標、說明
+// - scenes[].images：public/ 底下的相對路徑陣列，建議 3~5 張。
+//   留空的話會顯示虛線佔位框，方便先看動畫節奏
+export const TOUR = {
+  title: 'Services',
+  subtitle: '服務項目',
+  scenes: [
+    { eyebrow: '', title: '', description: '', images: [] },
+    { eyebrow: '', title: '', description: '', images: [] },
+    { eyebrow: '', title: '', description: '', images: [] },
+  ],
+}
+
 export const FILTERS = [
   { key: 'project', label: 'PROJECT' },
   { key: 'illustration', label: 'ILLUSTRATION' },

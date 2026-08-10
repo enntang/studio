@@ -1,6 +1,7 @@
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import { BASE } from './data'
+import Navbar from './Navbar'
 import Reveal from './Reveal'
 import ZoomImage from './ZoomImage'
 
@@ -26,7 +27,7 @@ const mdComponents = {
     const hasImg = node?.children?.some((c) => c.tagName === 'img')
     if (hasImg) return <>{children}</>
     return (
-      <p className='max-w-xl text-sm leading-relaxed text-neutral-600 mb-8'>
+      <p className='max-w-xl text-sm leading-relaxed text-body mb-8'>
         {children}
       </p>
     )
@@ -54,51 +55,49 @@ const mdComponents = {
 
 function WorkDetail({ work }) {
   return (
-    <div className='min-h-screen bg-white font-serif text-neutral-800 md:grid md:grid-cols-[18rem_1fr]'>
-      {/* 左欄：年代與介紹 */}
-      <aside className='px-8 md:pl-10 md:pr-6 pt-10 md:pt-14 md:sticky md:top-0 md:h-screen flex flex-col'>
-        <a href='#/' className='flex justify-center md:block mb-12 hover:opacity-60 transition-opacity'>
-          <img src={BASE + 'logo.svg'} alt='一元復始' className='h-[60px] md:h-[80px] w-auto' />
-        </a>
+    <div className='min-h-screen bg-surface font-serif text-ink md:grid md:grid-cols-[18rem_1fr]'>
+      <Navbar />
 
+      {/* 左欄：年代與介紹。logo 已經移到頂部導覽列，這裡不再重複放一個 */}
+      <aside className='px-8 md:pl-10 md:pr-6 pt-28 md:pt-40 md:sticky md:top-0 md:h-screen flex flex-col'>
         <h1 className='text-xl font-bold tracking-wide mb-1'>{work.title}</h1>
         {work.englishName && (
-          <div className='text-sm text-neutral-500 mb-2'>{work.englishName}</div>
+          <div className='text-sm text-muted mb-2'>{work.englishName}</div>
         )}
-        <div className='text-sm tracking-[0.2em] text-neutral-400 mb-6'>{work.year}</div>
+        <div className='text-sm tracking-[0.2em] text-muted mb-6'>{work.year}</div>
 
         {/* Project 類作品的委託資訊：Client、Design，沒填的欄位不顯示 */}
         {work.category === 'project' && (work.client || work.design) && (
-          <dl className='text-xs text-neutral-600 mb-6 space-y-1'>
+          <dl className='text-xs text-body mb-6 space-y-1'>
             {work.client && (
               <div>
-                <dt className='inline text-neutral-400 tracking-wide'>Client</dt>
+                <dt className='inline text-muted tracking-wide'>Client</dt>
                 <dd className='inline ml-2'>{work.client}</dd>
               </div>
             )}
             {work.design && (
               <div>
-                <dt className='inline text-neutral-400 tracking-wide'>Design</dt>
+                <dt className='inline text-muted tracking-wide'>Design</dt>
                 <dd className='inline ml-2'>{work.design}</dd>
               </div>
             )}
           </dl>
         )}
 
-        <p className='text-sm leading-relaxed text-neutral-600 whitespace-pre-line'>
+        <p className='text-sm leading-relaxed text-body whitespace-pre-line'>
           {work.description}
         </p>
 
         <a
           href='#/'
-          className='mt-12 md:mt-auto md:mb-14 text-[13px] tracking-[0.15em] text-neutral-700 hover:opacity-50 transition-opacity'
+          className='mt-12 md:mt-auto md:mb-14 text-[13px] tracking-[0.15em] text-ink-700 hover:opacity-50 transition-opacity'
         >
           ← ALL WORK
         </a>
       </aside>
 
       {/* 右側：圖文內容 */}
-      <main className='px-8 md:px-0 pt-8 md:pt-14 pb-24 md:max-w-[600px] md:mx-auto'>
+      <main className='px-8 md:px-0 pt-8 md:pt-40 pb-24 md:max-w-[600px] md:mx-auto'>
         {work.content ? (
           <ReactMarkdown components={mdComponents} rehypePlugins={[rehypeRaw]}>{work.content}</ReactMarkdown>
         ) : (
@@ -114,7 +113,7 @@ function WorkDetail({ work }) {
         )}
         {!work.content && !(work.images || [work.cover]).some(Boolean) && (
           // Notion 頁面內文還沒放圖文時的暫代區塊
-          <div className='aspect-[4/3] bg-neutral-100 flex items-center justify-center text-neutral-400 text-sm tracking-widest'>
+          <div className='aspect-[4/3] bg-surface-subtle flex items-center justify-center text-muted text-sm tracking-widest'>
             {work.title}
           </div>
         )}

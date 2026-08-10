@@ -1,4 +1,4 @@
-import Sidebar from './Sidebar'
+import Navbar from './Navbar'
 
 /**
  * 聯絡頁（版面參照 zaoridraws.cargo.site 的 Contact 頁）：
@@ -9,10 +9,10 @@ import Sidebar from './Sidebar'
  */
 function Contact() {
   return (
-    <div className='min-h-screen bg-white font-serif text-neutral-800'>
-      <Sidebar active='contact' />
+    <div className='min-h-screen bg-surface font-serif text-ink'>
+      <Navbar active='contact' />
 
-      <main className='pl-8 pr-8 md:pl-72 md:pr-24 pt-10 md:pt-14 pb-24 max-w-2xl text-sm leading-relaxed text-neutral-600'>
+      <main className='px-8 md:px-24 pt-28 md:pt-40 pb-24 max-w-2xl mx-auto text-sm leading-relaxed text-body'>
         {/* 以下為預留文字，請改成你自己的聯絡說明 */}
         <p className='mb-4'>Hello，我是 Enn Tang。</p>
         <p className='mb-2'>歡迎各式商業合作與委託洽詢，請來信至：</p>
@@ -36,7 +36,7 @@ function Contact() {
         </ul>
         <p className='mb-10'>如有尚未確認的內容，也歡迎來信一起討論。</p>
 
-        <hr className='border-neutral-200 mb-6' />
+        <hr className='border-line mb-6' />
 
         <p>
           ※ 報價將依委託內容與授權範圍評估，實際依需求規模與時程報價。
