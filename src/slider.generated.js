@@ -10,11 +10,19 @@ export const HERO_SLIDES = [
     "href": "#/work/year-of-the-tiger"
   },
   {
-    "slug": "遊戲美術設計",
-    "title": "遊戲美術設計",
-    "label": "網頁遊戲 UI / 美術設計《企鵝搶地》",
-    "image": "hero-images/遊戲美術設計/image.webp",
+    "slug": "桌遊美術設計",
+    "title": "桌遊美術設計",
+    "label": "企鵝搶地",
+    "image": "hero-images/桌遊美術設計/image.webp",
     "thumb": "",
+    "href": "#/work/penguin-territory"
+  },
+  {
+    "slug": "線上網頁遊戲-ui",
+    "title": "線上網頁遊戲 UI",
+    "label": "企鵝搶地",
+    "image": "hero-images/線上網頁遊戲-ui/image.webp",
+    "thumb": "hero-images/線上網頁遊戲-ui/thumb.webp",
     "href": "#/work/penguin-territory"
   }
 ]
