@@ -16,6 +16,34 @@ export const WORKS = [
     "content": "\n![Document.png](/work-images/you-are-not-here/image-1.webp)\n\n\n![Mockuuups_Paperback_mockup_on_a_red_metal_shelf_with_plants.jpeg](/work-images/you-are-not-here/image-2.webp)\n\n\n![Document.png](/work-images/you-are-not-here/image-3.webp)\n\n"
   },
   {
+    "slug": "summer-days",
+    "title": "夏日",
+    "category": "illustration",
+    "tags": [],
+    "date": "2026-07-04",
+    "year": "2026",
+    "englishName": "Summer Days",
+    "client": "",
+    "design": "",
+    "description": "",
+    "cover": "work-images/summer-days/cover.webp",
+    "content": ""
+  },
+  {
+    "slug": "star",
+    "title": "Star",
+    "category": "illustration",
+    "tags": [],
+    "date": "2024-11-24",
+    "year": "2024",
+    "englishName": "Star",
+    "client": "",
+    "design": "",
+    "description": "",
+    "cover": "work-images/star/cover.webp",
+    "content": ""
+  },
+  {
     "slug": "penguin-territory",
     "title": "網頁遊戲 UI / 美術設計《企鵝搶地》",
     "category": "project",
@@ -73,7 +101,7 @@ export const WORKS = [
     "year": "2018",
     "englishName": "History Textbook Design",
     "client": "南一書局",
-    "design": "Enn Tang",
+    "design": "",
     "description": "這是一本因應新課綱，南一書局高中歷史組和作者群傾盡心血製作的課本，內容在講述語言、翻譯如何影響我們的日常生活，是一個跨越地理位置與時間軸來看歷史的嶄新方法。",
     "cover": "work-images/history-text-book/cover.webp",
     "content": "\n![image.png](/work-images/history-text-book/image-1.webp)\n\n\n# 封面設計\n\n\n風格與標準字都經過多次的演進過程。\n\n\n![image.png](/work-images/history-text-book/image-2.webp)\n\n\n![image.png](/work-images/history-text-book/image-3.webp)\n\n\n# **內頁與插畫設計**\n\n\n在課本內使用大量的插圖以及引導思考的問答，減去生硬感，增加學生投入意願。\n\n\n![%E5%85%A7%E9%A0%812.jpg](/work-images/history-text-book/image-4.webp)\n\n\n![%E5%85%A7%E9%A0%813.jpg](/work-images/history-text-book/image-5.webp)\n\n\n![Artboard1.png](/work-images/history-text-book/image-6.webp)\n\n\n![Artboard2.png](/work-images/history-text-book/image-7.webp)\n\n\n\n<div class=\"grid grid-cols-2 gap-4 mb-8\">\n<div><img src=\"/work-images/history-text-book/col1-0-1.webp\" alt=\"\" class=\"w-full h-auto block\" /></div>\n<div><img src=\"/work-images/history-text-book/col1-1-1.webp\" alt=\"\" class=\"w-full h-auto block\" /></div>\n</div>\n\n\n\n![Artboard8.png](/work-images/history-text-book/image-8.webp)\n\n\n\n<div class=\"grid grid-cols-2 gap-4 mb-8\">\n<div><img src=\"/work-images/history-text-book/col2-0-1.webp\" alt=\"\" class=\"w-full h-auto block\" /></div>\n<div><img src=\"/work-images/history-text-book/col2-1-1.webp\" alt=\"\" class=\"w-full h-auto block\" /></div>\n</div>\n\n\n\n![Artboard7.png](/work-images/history-text-book/image-9.webp)\n\n\n![Artboard9.png](/work-images/history-text-book/image-10.webp)\n\n\n\n<div class=\"grid grid-cols-2 gap-4 mb-8\">\n<div><img src=\"/work-images/history-text-book/col3-0-1.webp\" alt=\"\" class=\"w-full h-auto block\" /></div>\n<div><img src=\"/work-images/history-text-book/col3-1-1.webp\" alt=\"\" class=\"w-full h-auto block\" /></div>\n</div>\n\n\n"
